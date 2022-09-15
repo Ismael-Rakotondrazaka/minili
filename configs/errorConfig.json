@@ -1,0 +1,10 @@
+{
+    "DEFAULT_GENERAL_ERROR_MESSAGE": "Sorry, the server encountered an error. We are trying to fix that.",
+    "DEFAULT_SERVER_ERROR_MESSAGE": "Sorry, the server encountered an error. We are trying to fix that.",
+    "DEFAULT_BAD_REQUEST_ERROR_MESSAGE": "Sorry, the request can not be processed. Please, try again.",
+    "DEFAULT_NOT_FOUND_ERROR_MESSAGE": "Sorry, the resource is not found.",
+    "DEFAULT_CONFLICT_ERROR_MESSAGE": "Sorry, the action produce conflict in our records. Pleas, try again.",
+    "DEFAULT_UNAUTHORIZED_ERROR_MESSAGE": "Sorry, you must be authenticated to access this resource. Please, log in.",
+    "DEFAULT_FORBIDDEN_ERROR_MESSAGE": "Sorry, you don't have the right permission to access this resource.",
+    "DEFAULT_UNKNOWN_ERROR_MESSAGE": "Sorry, an unknown error occurred while doing the action. We are trying to fix that."
+}
