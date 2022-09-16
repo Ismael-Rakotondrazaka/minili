@@ -1,7 +1,8 @@
 # minili
 
 ## Description
-minili is a web application that create a short version of any link. You can use the minified link and you will be redirected automatically to the long version.
+minili is a web application that create a short version of any link. You can use the minified link and you will be redirected automatically to the long version.\
+Live: https://minili.onrender.com/
 
 ## Installation
 
