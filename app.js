@@ -17,6 +17,16 @@ app.use("/", express.static(path.join(__dirname, "/public")));
 
 app.use("/", require("./routes/v1/process"));
 
+app.use("/status/health", (req, res, next) => {
+  return res.json({
+    data: {
+      status: {
+        health: true,
+      },
+    },
+  });
+});
+
 app.use("/api/v1/links", require("./routes/v1/api/links"));
 
 app.use("/api/*", (req, res, next) => {
