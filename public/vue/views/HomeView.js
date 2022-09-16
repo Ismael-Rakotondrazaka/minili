@@ -12,9 +12,9 @@ export default {
       REVERSE_ERROR: "The long version of your link is not found.",
     };
 
-    const APP_URL = "http://localhost:8001";
-    const API_ENTRY_POINT = "http://localhost:8001/api/v1";
-    const APP_HOST = "localhost:8001";
+    const APP_URL = "https://minili.onrender.com";
+    const API_ENTRY_POINT = "https://minili.onrender.com/api/v1";
+    const APP_HOST = "minili.onrender.com";
 
     /*
       links

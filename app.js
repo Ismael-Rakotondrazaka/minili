@@ -37,7 +37,7 @@ const { errorMiddleware } = require("./middlewares");
 const { createNotFoundPageResponse } = require("./utils/responses");
 app.use(errorMiddleware);
 
-const PORT = process.env.APP_PORT || 8001;
+const PORT = process.env.PORT || 8001;
 app.listen(PORT, (req, res) => {
   console.log("listening on port ", PORT);
 });

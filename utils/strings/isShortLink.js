@@ -2,8 +2,8 @@ const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "../../.env") })
 
 function isShortLink(link) {
-  // should get https://domain.com
-  let hostDomain = process.env.APP_HOST.split("//")[1];
+  // should get domain.com
+  let hostDomain = process.env.APP_HOST;
   if (!hostDomain) {
     return false;
   }

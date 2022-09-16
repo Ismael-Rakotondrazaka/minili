@@ -4,7 +4,7 @@ const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "../../.env") });
 
 function validateShortLink(link) {
-  let hostDomain = process.env.APP_HOST.split("//")[1];
+  let hostDomain = process.env.APP_HOST;
   if (!hostDomain) {
     throw new ServerError(
       `Invalid environnement variable:\nAPP_HOST=${process.env.APP_HOST}`,
@@ -22,7 +22,7 @@ function validateShortLink(link) {
   }
 
   if (!linkDomain || linkDomain !== hostDomain) {
-    throw new BadRequestError(`The link ${process.env.APP_HOST} is broken.`);
+    throw new BadRequestError(`The link ${link} is broken.`);
   }
 
   return true;
