@@ -1,0 +1,32 @@
+services:
+  app:
+    image: node:20-alpine
+    container_name: minili-dev
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      PORT: 3000
+      APP_URL: ${APP_URL}
+      MONGO_URI: ${MONGO_URI}
+      REDIS_URL: ${REDIS_URL}
+      # watcher stability for Docker Desktop (Windows/macOS)
+      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_INTERVAL: "100"
+    networks:
+      - web
+      - backend-network
+    labels:
+      - "traefik.enable=true"
+      # - "traefik.docker.network=web"
+      - "traefik.http.routers.url.rule=Host(`minili.localhost`)"
+      - "traefik.http.routers.url.entrypoints=web"
+      - "traefik.http.services.url.loadbalancer.server.port=3000"
+
+networks:
+  web:
+    external: true
+  backend-network:
+    external: true

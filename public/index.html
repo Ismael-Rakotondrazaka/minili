@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>minili — URL Shortener</title>
+    <meta
+      name="description"
+      content="A minimal, fast URL shortener with a clean and simple interface. Open source and easy to self-host."
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="minili — URL Shortener" />
+    <meta
+      property="og:description"
+      content="A minimal, fast URL shortener with a clean and simple interface. Open source and easy to self-host."
+    />
+    <meta property="og:image" content="/minili-card.png" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="minili — URL Shortener" />
+    <meta
+      name="twitter:description"
+      content="A minimal, fast URL shortener with a clean and simple interface. Open source and easy to self-host."
+    />
+    <meta name="twitter:image" content="/minili-card.png" />
+    <!-- JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "minili",
+        "description": "A minimal, fast URL shortener with a clean and simple interface. Open source and easy to self-host.",
+        "url": "https://minili.ismaelrakoto.com",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Ismael RAKOTONDRAZAKA",
+          "url": "https://github.com/Ismael-Rakotondrazaka"
+        },
+        "featureList": "URL shortening, QR code generation, click tracking",
+        "isAccessibleForFree": true,
+        "license": "https://opensource.org/licenses/MIT"
+      }
+    </script>
+
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #f5f5f5;
+        color: #111;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      main {
+        width: 100%;
+        max-width: 580px;
+        padding: 2rem;
+      }
+
+      h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        letter-spacing: -1px;
+        color: #000;
+        margin-bottom: 0.25rem;
+      }
+
+      .tagline {
+        color: #888;
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+      }
+
+      form {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      input[type="url"] {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        color: #111;
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.15s;
+        min-width: 0;
+      }
+
+      input[type="url"]:focus {
+        border-color: rgb(14 165 233);
+      }
+      input[type="url"]::placeholder {
+        color: #bbb;
+      }
+
+      button {
+        padding: 0.75rem 1.25rem;
+        background: rgb(14 165 233);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s;
+        white-space: nowrap;
+      }
+
+      button:hover {
+        background: rgb(2 132 199);
+      }
+      button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      #result {
+        margin-top: 1.25rem;
+        padding: 0.875rem 1rem;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      #short-url {
+        flex: 1;
+        font-family: "SF Mono", "Fira Code", monospace;
+        font-size: 0.9rem;
+        color: #111;
+        text-decoration: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      #short-url:hover {
+        color: #0ea5e9;
+        text-decoration: underline;
+      }
+
+      #copy-btn {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.8rem;
+        background: #f0f0f0;
+        color: #111;
+        flex-shrink: 0;
+      }
+
+      #copy-btn:hover {
+        background: #e0e0e0;
+      }
+
+      #error {
+        margin-top: 1rem;
+        color: #dc2626;
+        font-size: 0.85rem;
+      }
+
+      #qr-section {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+
+      #qr-code {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #qr-actions {
+        margin-top: 0.875rem;
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      #download-qr-btn {
+        flex: 1;
+        background: #f0f0f0;
+        color: #111;
+      }
+
+      #download-qr-btn:hover {
+        background: #e0e0e0;
+      }
+
+      #action-status {
+        margin-top: 0.625rem;
+        font-size: 0.85rem;
+        color: #666;
+      }
+
+      #action-status.error {
+        color: #dc2626;
+      }
+
+      footer {
+        margin-top: 3rem;
+        text-align: center;
+        font-size: 0.8rem;
+        color: #bbb;
+      }
+
+      footer a {
+        color: #888;
+        text-decoration: none;
+      }
+
+      footer a:hover {
+        color: #0ea5e9;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>
+        <img
+          src="/images/logo-minili.svg"
+          alt="minili"
+          height="36"
+          style="vertical-align: middle; margin-right: 0.4rem"
+        />minili
+      </h1>
+      <p class="tagline">paste a long url, get a short one</p>
+
+      <form id="form">
+        <input
+          type="url"
+          id="url-input"
+          placeholder="https://example.com/a/very/long/url"
+          autocomplete="off"
+          spellcheck="false"
+          required
+        />
+        <button type="submit" id="submit-btn">shorten</button>
+      </form>
+
+      <p id="error" hidden></p>
+
+      <div id="result" hidden>
+        <a
+          id="short-url"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+        ></a>
+        <button id="copy-btn" type="button">copy</button>
+      </div>
+
+      <div id="qr-section" hidden>
+        <div id="qr-code"></div>
+        <div id="qr-actions">
+          <button id="download-qr-btn" type="button">Download QR Code</button>
+        </div>
+        <p id="action-status" hidden aria-live="polite"></p>
+      </div>
+      <footer>
+        <p>
+          made with ♥ &mdash;
+          <a
+            href="https://github.com/Ismael-Rakotondrazaka/minili"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Ismael</a
+          >
+        </p>
+      </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script>
+      const form = document.getElementById("form");
+      const urlInput = document.getElementById("url-input");
+      const submitBtn = document.getElementById("submit-btn");
+      const errorEl = document.getElementById("error");
+      const resultEl = document.getElementById("result");
+      const shortUrlEl = document.getElementById("short-url");
+      const copyBtn = document.getElementById("copy-btn");
+      const qrSectionEl = document.getElementById("qr-section");
+      const qrCodeEl = document.getElementById("qr-code");
+      const downloadQrBtn = document.getElementById("download-qr-btn");
+      const actionStatusEl = document.getElementById("action-status");
+
+      let statusTimer;
+
+      function renderQr(text) {
+        qrCodeEl.innerHTML = "";
+        new QRCode(qrCodeEl, {
+          text,
+          width: 220,
+          height: 220,
+          colorDark: "#111111",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M,
+        });
+      }
+
+      function getQrDataUrl() {
+        const canvas = qrCodeEl.querySelector("canvas");
+        if (canvas) return canvas.toDataURL("image/png");
+
+        const img = qrCodeEl.querySelector("img");
+        return img ? img.src : null;
+      }
+
+      function showActionStatus(message, isError = false, duration = 2200) {
+        clearTimeout(statusTimer);
+        actionStatusEl.textContent = message;
+        actionStatusEl.hidden = false;
+        actionStatusEl.classList.toggle("error", isError);
+        statusTimer = setTimeout(() => {
+          actionStatusEl.hidden = true;
+        }, duration);
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        errorEl.hidden = true;
+        resultEl.hidden = true;
+        qrSectionEl.hidden = true;
+        actionStatusEl.hidden = true;
+        submitBtn.disabled = true;
+        submitBtn.textContent = "...";
+
+        const MIN_DELAY = 600;
+
+        try {
+          const [res] = await Promise.all([
+            fetch("/shorten", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ url: urlInput.value }),
+            }),
+            new Promise((r) => setTimeout(r, MIN_DELAY)),
+          ]);
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            errorEl.textContent = data.error ?? "something went wrong";
+            errorEl.hidden = false;
+            return;
+          }
+
+          shortUrlEl.href = data.short;
+          shortUrlEl.textContent = data.short;
+          renderQr(data.short);
+          resultEl.hidden = false;
+          qrSectionEl.hidden = false;
+          urlInput.value = "";
+        } catch {
+          errorEl.textContent = "network error, please try again";
+          errorEl.hidden = false;
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "shorten";
+        }
+      });
+
+      copyBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(shortUrlEl.href);
+          copyBtn.textContent = "copied!";
+          showActionStatus("link copied to clipboard");
+          setTimeout(() => {
+            copyBtn.textContent = "copy";
+          }, 2000);
+        } catch {
+          showActionStatus("could not copy link", true);
+        }
+      });
+
+      downloadQrBtn.addEventListener("click", () => {
+        const dataUrl = getQrDataUrl();
+        if (!dataUrl) {
+          showActionStatus("qr image is not ready yet", true);
+          return;
+        }
+
+        const code = shortUrlEl.href.split("/").pop() || "minili";
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = `minili-${code}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showActionStatus("qr downloaded");
+      });
+    </script>
+  </body>
+</html>
