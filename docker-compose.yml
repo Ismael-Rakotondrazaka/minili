@@ -5,9 +5,10 @@ services:
     restart: always
     image: minili:2.0.0
     environment:
-      - MONGO_URI=mongodb://admin:supersecret@mongo:27017/urlshortener?authSource=admin
-      - REDIS_URL=redis://:strongpassword@redis:6379
-      - APP_URL=https://minili.localhost # change later to real domain
+      - PORT=3000
+      - APP_URL=${APP_URL}
+      - MONGO_URI=${MONGO_URI}
+      - REDIS_URL=${REDIS_URL}
 
     networks:
       - web
@@ -17,7 +18,7 @@ services:
       - "traefik.enable=true"
 
       # Router (HTTP)
-      - "traefik.http.routers.url.rule=Host(`minili.localhost`)"
+      - "traefik.http.routers.url.rule=Host(`minili.ismaelrakoto.com`)"
       - "traefik.http.routers.url.entrypoints=web"
 
       # Service port inside container
