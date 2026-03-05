@@ -16,13 +16,14 @@ services:
 
     labels:
       - "traefik.enable=true"
-
+      - "traefik.docker.network=web"
       # Router (HTTP)
-      - "traefik.http.routers.url.rule=Host(`minili.ismaelrakoto.com`)"
-      - "traefik.http.routers.url.entrypoints=web"
+      - "traefik.http.routers.minili.rule=Host(`minili.ismaelrakoto.com`)"
+      - "traefik.http.routers.minili.entrypoints=websecure"
+      - "traefik.http.routers.minili.tls.certresolver=leresolver"
 
       # Service port inside container
-      - "traefik.http.services.url.loadbalancer.server.port=3000"
+      - "traefik.http.services.minili.loadbalancer.server.port=3000"
 
 networks:
   web:
